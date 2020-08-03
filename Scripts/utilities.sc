@@ -11,6 +11,11 @@ __config() -> { 'stay_loaded' -> true };
 // Add fire check for blockabove.
 // Fire will create light, but will go out in the overworld and ender.
 // So fire may need to be replaced with none spawnable block if not in the nether.
+//
+// TODO:
+// Drowned spawn in water. Currently ignored.
+//
+// And probably some other blocks that are spawn proof.
 __spawnableblock(b) -> (
 	if(solid(b) == false,
 		return(false);
@@ -66,7 +71,7 @@ __isspawnableblocktype(b) -> (
 	return(true);
 );
 
-__blockabove(b) -> pos_offset(b, 'up', 1);
+__getblockabove(b) -> pos_offset(b, 'up', 1);
 
 __send_particle_line(from, to) -> (
     particle_line('dust 0.9 0.1 0.1 0.5', 

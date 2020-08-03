@@ -4,7 +4,7 @@
 ///right click on a torch while looking at nothing to toggle.
 
 // Importing functions from shared library.
-import('utilities','__spawnableblock', '__blockabove', '__send_particle_line', '__send_particle');
+import('utilities','__spawnableblock', '__getblockabove', '__send_particle_line', '__send_particle');
 
 // Keeps script loaded if using script autoloader.
 __config() -> { 'stay_loaded' -> true };
@@ -40,8 +40,8 @@ __search_spawnable_blocks(player) -> (
 			blockpos = playerpos+l(rand(radius), rand(radius), rand(radius)) - radius/2;
 			if (__spawnableblock(blockpos),
 				
-                __send_particle_line(playerpos + l(0, 1.2, 0), __blockabove(blockpos) + l(0.5, 0, 0.5));
-                __send_particle(__blockabove(blockpos) + l(0.5, 0, 0.5));
+                __send_particle_line(playerpos + l(0, 1.2, 0), __getblockabove(blockpos) + l(0.5, 0, 0.5));
+                __send_particle(__getblockabove(blockpos) + l(0.5, 0, 0.5));
 
 				success += 1;
 				if (success > numberoflines, 
