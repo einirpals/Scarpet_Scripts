@@ -46,38 +46,26 @@ global_overworld_ores = l(
 );
 
 global_pick_type = 'golden_pickaxe';
+global_prospecting_radius = 16;
 
-__on_tick() ->
-(
+__on_tick() -> (
 	for (player('!spectating'), player = _;
-		if ( level = __holds(player, global_pick_type, 'fortune'),
+		if (level = __holds(player, global_pick_type, 'fortune'),
 			player_pos = pos(player);
 			l(x, y, z) = map(player_pos, floor(_));
-			player_in_caves = top('terrain',player_pos) > (y+3);
-			// modify reference Y level, around diamond level for surface tracking
-			base_y = if(player_in_caves, y, 8);
-			loop(level*40,
-				try (
-					l(block_x, block_y, block_z) = l(x, base_y, z) 
-							+ l(rand(16)-rand(16), rand(16)-rand(16), rand(16)-rand(16));
+			player_in_caves = top('terrain',player_pos) > (y + 3);
+			if(player_in_caves,
+				loop(round(level * 20 * ((256 - y) / 256)),					
+					l(block_x, block_y, block_z) = player_pos + l(rand(global_prospecting_radius), rand(global_prospecting_radius), rand(global_prospecting_radius)) - global_prospecting_radius/2;
 					block = block(block_x, block_y, block_z);
 					if (block ~ '_ore',
-						for(range(level-1, 1+2*level),
+						for(range(level - 1, 1 + 2 * level),
 							l(oreblock, ore_particle) = get(global_overworld_ores, _);
 							if (block == oreblock,
-								if( player_in_caves,
-									particle_line(ore_particle, 
-										player_pos+l(0,1.2,0), 
-										block_x+0.5, block_y+0.5, block_z+0.5, 
-										0.8
-									)
-								,//else	
-									particle(ore_particle, 
-										block_x, top('terrain',block)+1 , block_z,
-										20
-									)
-								);
-								throw()
+								particle_line(ore_particle, 
+									player_pos + l(0, 1.2, 0), 
+									block_x + 0.5, block_y + 0.5, block_z - 0.5, 
+									0.8)
 							)
 						)
 					)
@@ -88,26 +76,30 @@ __on_tick() ->
 );
 
 global_nether_ores = l(
+	l('nether_gold_ore','dust 0.9 0.9 0.0 0.5'),
+	l('gilded_blackstone','dust 0.9 0.9 0.0 0.5'),
+
 	l('nether_quartz_ore','dust 0.9 0.9 0.9 0.5'),
+	l('ancient_debris','dust 0.6 0.3 0.1 0.5'),
 );
 
-
-__on_tick_nether() ->
-(
+__on_tick_nether() -> (
 	for (player('!spectating'), player = _;
-		if ( lvl = __holds(player, global_pick_type, 'fortune'),
+		if (level = __holds(player, global_pick_type, 'fortune'),
 			player_pos = pos(player);
-			l(x, y, z) = player_pos;
-			loop(lvl*40,
-				block = block(player_pos + l(rand(16)-rand(16),rand(16)-rand(16),rand(16)-rand(16)));
-				if (block == 'nether_quartz_ore',
-					l(block_x, block_y, block_z) = pos(block);
-					particle_line('dust 0.9 0.9 0.9 0.5', 
-						player_pos+l(0, 1.2, 0),
-						block_x+0.5, block_y+0.5, block_z+0.5,
-						0.8
+			l(x, y, z) = map(player_pos, floor(_));
+			loop(round(level * 30 * ((128 - y) / 128)),					
+				l(block_x, block_y, block_z) = player_pos + l(rand(global_prospecting_radius), rand(global_prospecting_radius), rand(global_prospecting_radius)) - global_prospecting_radius/2;
+				block = block(block_x, block_y, block_z);
+				for(range(level - 1, level + 1),
+					l(oreblock, ore_particle) = get(global_nether_ores, _);
+					if (block == oreblock,
+						particle_line(ore_particle, 
+							player_pos + l(0, 1.2, 0), 
+							block_x + 0.5, block_y + 0.5, block_z - 0.5, 
+							0.8)
 					)
-				)
+				)	
 			)
 		)
 	)
