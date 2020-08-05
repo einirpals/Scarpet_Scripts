@@ -1,3 +1,5 @@
+// Minecraft 1.16.1
+// Scarpet 1.6
 
 // Keeps script loaded if using script autoloader.
 // Global may not be neede...

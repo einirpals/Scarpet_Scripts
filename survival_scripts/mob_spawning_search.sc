@@ -1,3 +1,6 @@
+// Minecraft 1.16.1
+// Scarpet 1.6
+
 // Based on https://github.com/gnembon/scarpet/blob/master/programs/survival/auto_lighter.sc
 // Based on https://github.com/gnembon/scarpet/blob/master/programs/survival/prospectors_pick.sc
 

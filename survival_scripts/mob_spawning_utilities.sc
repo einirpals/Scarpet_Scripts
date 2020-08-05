@@ -1,10 +1,23 @@
+// Minecraft 1.16.1
+// Scarpet 1.6
+
 // Importing functions from shared library.
 import('utilities','__spawnableblock', '__isairplantorvegetation', '__ismoblightlevel', '__getblockabove');
 
-// This is slow as fuck. 40-60 sec just to loop over every block.
-checkforspawnableblocks_block(cx, cy, cz) -> (
-	solidblocks = l();
-	
+// Keeps script loaded if using script autoloader.
+__config() -> { 'stay_loaded' -> true };
+
+// public function for testing.
+spawnableblocksinspawnsphere_block(cx, cy, cz) -> (
+    if(__getspawnableblocks(cx, cy, cz),
+        print('Done!');
+    )
+);
+
+// This is slow as fuck. 40-60s just to loop over every block.
+// Well... there are ove 9M blockes to check...
+// Using array/list of cords is faster, then using the 'block' function.
+__getspawnableblocks(cx, cy, cz) -> (
 	// Move center block to true center.
 	cx = cx - 0.5;
 	cz = cz - 0.5;
@@ -31,6 +44,7 @@ checkforspawnableblocks_block(cx, cy, cz) -> (
 	);
 
     print(str('%s None air / liquid blocks.', length(solidblocks)));
+    print(' --- ');
 
     spawnablelowlightblocks = l();
 	spawnablehighlightblocks = l();
@@ -54,4 +68,6 @@ checkforspawnableblocks_block(cx, cy, cz) -> (
 	print(str('%s Total high light spawnable blocks.', length(spawnablehighlightblocks)));
 	print(' --- ');
 	print(str('%s Total spawnable blocks.', length(spawnablelowlightblocks) + length(spawnablehighlightblocks)));
+
+    return(l(spawnablelowlightblocks, spawnablehighlightblocks));
 );

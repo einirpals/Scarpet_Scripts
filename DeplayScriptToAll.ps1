@@ -1,6 +1,6 @@
 # Powershell script to deplay all scripts in the script folder to Minecraft saves.
 
-$ScriptsFolder = "Scripts"
+$ScriptsFolder = "survival_scripts"
 $FullScriptsPath = [IO.Path]::Combine($PSScriptRoot, $ScriptsFolder)
 
 $MinecraftScriptsFolder = "scripts"
